@@ -4,6 +4,7 @@ import urllib.request, urllib.parse
 import http.cookiejar
 import re
 
+
 # 输入学号和密码
 USERNAME = 'username' or input('学号')
 PASSWORD = 'password' or input('密码')
@@ -14,8 +15,12 @@ cookie_jar = http.cookiejar.CookieJar()
 cookie_handler = urllib.request.HTTPCookieProcessor(cookie_jar)
 opener = urllib.request.build_opener(cookie_handler)
 
+# 服务器在成功登陆后检查User-Agent
+# 发起无UA请求的IP会被短暂禁止连接
+opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
 
-# 打开广州大学统一认证系统
+
+# 访问统一认证系统
 cas_url = 'https://cas.gzhu.edu.cn/cas_server/login'
 with opener.open(cas_url) as response:
     # 取得网页编码
@@ -23,8 +28,8 @@ with opener.open(cas_url) as response:
 
     # 解析网页获得表单数据以便后续模拟登陆
     data: dict = {}  # 在登陆的POST请求中提交的数据
-    body = response.read().decode(charset)
-    form = re.search(r'<form id="fm1"[\s\S]*?>(?P<content>[\s\S]*)</form>', body).group('content')  # 定位登陆表单
+    payload = response.read().decode(charset)
+    form = re.search(r'<form id="fm1"[\s\S]*?>(?P<content>[\s\S]*)</form>', payload).group('content')  # 定位登陆表单
 
     # 组合登陆数据
     for line in form.split('\n'):
@@ -34,40 +39,26 @@ with opener.open(cas_url) as response:
     data['username'], data['password'] = USERNAME, PASSWORD
 
 
-# 尝试登陆
+# 登陆统一认证系统
 with opener.open(cas_url, urllib.parse.urlencode(data).encode(charset)) as response:
-    body = response.read().decode('utf-8')
-    print(body)
-    if '账号或密码错误' in body:
-        print('学号或密码错误')
+    payload = response.read().decode(charset)
+    if '账号或密码错误' in payload:
+        print('用户名或密码错误')
         exit(0)
 
 
-exit(0)
+# 登陆教务系统
+jwxt_login_url = 'http://jwxt.gzhu.edu.cn/jwglxt/lyiotlogin'
+opener.open(jwxt_login_url)
 
-login_url = 'https://cas.gzhu.edu.cn/cas_server/login'
-login_data = urllib.parse.urlencode({
-    'username': USERNAME,
-    'password': PASSWORD,
-    'captcha': '',
-    'warn': 'true',
-    'lt': 'LT-630570-5esaZtcSufJzr9hrYcaxbh9zbazhbn-cas01.example.org',
-    'execution': 'e4s1',
-    '_eventId': 'submit',
-    'submit': '登陆'
-}).encode('utf-8')
-login_request = urllib.request.Request(login_url, login_data)
 
-opener.open(login_url)
-print(login_data)
+# 打开个人信息查询页面
+info_url = 'http://jwxt.gzhu.edu.cn/jwglxt/xsxxxggl/xsgrxxwh_cxXsgrxx.html?gnmkdm=N100801&layout=default'
+with opener.open(info_url) as response:
+    payload = response.read().decode(charset)
 
-for item in cookie_jar:
-    print(item)
+    # 查询姓名
+    match = re.search(r'<label[\s\S]*?姓名[\s\S]*?<p.*?>(?P<name>.*?)</p>', payload)
+    if match:
+        print('欢迎，' + match.group('name'))
 
-with opener.open(login_request) as response:
-    print(response.getcode())
-    if '账号' in response.read().decode('utf-8'):
-        print('ok')
-
-for item in cookie_jar:
-    print(item)
