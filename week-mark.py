@@ -22,6 +22,12 @@ OUTPUT_FILENAME = 'week-mark.ics'
 """ 信息输入完成 """
 
 
+# 确认已经输入的信息
+print('将自' + FIRST_DATE + '始每隔1周创建Week X全天日程，共计创建' + str(WEEK_COUNT) + '次')
+print('输出文件名为' + OUTPUT_FILENAME)
+input('请按回车键确认上述信息：')
+
+
 # 打开输出文件
 file = open(OUTPUT_FILENAME, 'w', encoding='utf-8')
 
@@ -61,3 +67,5 @@ for i in range(WEEK_COUNT):
 # 写入结束信息并关闭文件
 file.write("END:VCALENDAR\n")
 file.close()
+
+print('完成')

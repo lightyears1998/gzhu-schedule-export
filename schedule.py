@@ -37,6 +37,14 @@ OUTPUT_FILENAME = 'schedule.ics'
 """ 信息输入完成 """
 
 
+# 确认已经输入的信息
+print('您的学号为' + USERNAME)
+print('抓取' + str(YEAR) + '-' + str(YEAR+1) + '学年' + ['上学期', '下学期'][SEMESTER == 2] + '的课程表')
+print('第一周的周一设定为' + DATE_OF_MONDAY_OF_FIRST_WEEK)
+print('输出文件名为' + OUTPUT_FILENAME)
+input('请按回车键确认上述信息：')
+
+
 # 准备网络组件
 cookie_jar = http.cookiejar.CookieJar()
 cookie_handler = urllib.request.HTTPCookieProcessor(cookie_jar)
@@ -149,8 +157,7 @@ for course in courses:
     # 始末上课周数，此数据的样式有“1-16周”，“11周”，还有些课程分段上课，如“9周,14周”
     begin_and_end_weeks = course['zcd'].split(',')  # 将分段上课的课程分段处理
 
-    # 输出查询的课程信息
-    print(name, teacher, weekday, begin_period, end_period, location, begin_and_end_weeks)
+    print(name, end=' ')  # 向控制台输出课程名称
 
     for begin_and_end_week in begin_and_end_weeks:
         begin_and_end_week = begin_and_end_week.strip('周')  # 去掉结尾的“周”
@@ -177,3 +184,5 @@ for course in courses:
 # 写入结束信息并关闭文件
 file.write("END:VCALENDAR\n")
 file.close()
+
+print('\n完成')
