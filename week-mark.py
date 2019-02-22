@@ -23,7 +23,7 @@ OUTPUT_FILENAME = 'week-mark.ics'
 
 
 # 打开输出文件
-file = open(OUTPUT_FILENAME, 'w')
+file = open(OUTPUT_FILENAME, 'w', encoding='utf-8')
 
 # 写入起始信息
 file.write("""BEGIN:VCALENDAR

@@ -112,7 +112,7 @@ if opens_date.weekday() != 0:
     raise ValueError(DATE_OF_MONDAY_OF_FIRST_WEEK + '似乎不是周一，是否设置了正确的DATE_OF_MONDAY_OF_FIRST_WEEK？')
 
 
-file = open(OUTPUT_FILENAME, 'w')
+file = open(OUTPUT_FILENAME, 'w', encoding='utf-8')
 
 # 写入起始的历法和时区等信息
 file.write("""BEGIN:VCALENDAR
