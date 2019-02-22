@@ -7,6 +7,14 @@ import datetime
 import json
 
 
+"""schedule.py
+
+从广州大学教务系统中获取课程信息，并输出为ics文件
+以便将课程信息导入到支持ics的日历程序中
+
+"""
+
+
 """ 在下方输入信息 """
 
 
@@ -23,7 +31,6 @@ SEMESTER = 2
 # 学期第一周的星期一的日期
 DATE_OF_MONDAY_OF_FIRST_WEEK = '2019/2/25'
 
-# 输出ics文件的文件名
 OUTPUT_FILENAME = 'schedule.ics'
 
 
@@ -167,7 +174,6 @@ for course in courses:
         file.write('LOCATION:' + course['cdmc'] + '\n')  # 上课地点
         file.write('END:VEVENT\n')  # ics日程的结束标记
 
-# 写入结束信息
+# 写入结束信息并关闭文件
 file.write("END:VCALENDAR\n")
-
 file.close()

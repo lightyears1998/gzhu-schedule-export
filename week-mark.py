@@ -1,14 +1,31 @@
+#!python3
+
 from datetime import datetime, timedelta
 
 
-OUTPUT_FILENAME = 'week-mark.ics'
+"""week-mark.py
 
-WEEK_COUNT = 20
+自FIRST_DATE起，连续创建WEEK_COUNT个全天日程事件，
+日程的标题分别设置为“Week 1, 2, ...”。
+
+"""
+
+
+""" 在下方输入信息 """
 
 FIRST_DATE = '2019/02/24'
 
+WEEK_COUNT = 20
+
+OUTPUT_FILENAME = 'week-mark.ics'
+
+""" 信息输入完成 """
+
+
+# 打开输出文件
 file = open(OUTPUT_FILENAME, 'w')
 
+# 写入起始信息
 file.write("""BEGIN:VCALENDAR
 VERSION:2.0
 METHOD:PUBLISH
@@ -26,18 +43,21 @@ END:VTIMEZONE
 """)
 
 
+# 计算开始日期
 first_date = datetime.strptime(FIRST_DATE, '%Y/%m/%d')
 
+
+# 创建WEEK_COUNT个日程
 for i in range(WEEK_COUNT):
     now_date = first_date + timedelta(weeks=i)
 
-    file.write('BEGIN:VEVENT\n')
-    file.write('SUMMARY:' + 'Week ' + str(i+1) + '\n')
-    file.write('DTSTART;VALUE=DATE:' + now_date.strftime('%Y%m%d') + '\n')
-    file.write('DTEND;VALUE=DATE:' + (now_date + timedelta(days=1)).strftime('%Y%m%d') + '\n')
-    file.write('END:VEVENT\n')
+    file.write('BEGIN:VEVENT\n')  # 日程开始标记
+    file.write('SUMMARY:' + 'Week ' + str(i+1) + '\n')  # 日程标题
+    file.write('DTSTART;VALUE=DATE:' + now_date.strftime('%Y%m%d') + '\n')  # 日程开始日期
+    file.write(
+        'DTEND;VALUE=DATE:' + (now_date + timedelta(days=1)).strftime('%Y%m%d') + '\n')  # 日程结束日期，全天事件的结束日期在开始日期的后一天
+    file.write('END:VEVENT\n')  # 日程结束标记
 
+# 写入结束信息并关闭文件
 file.write("END:VCALENDAR\n")
-
-# DTSTART;VALUE=DATE:20180916
-# DTEND;VALUE=DATE:20180917
+file.close()
