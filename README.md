@@ -1,10 +1,8 @@
 # gzhu-schedule-export
 
-用于将广州大学教务系统课程表导出为iCal格式文件（.ics）的小工具。
+这是一个将广州大学教务系统课程表导出为iCal格式文件（.ics）的小工具。iCal文件可由Google Calendar、MS Outlook等日历程序导入。
 
 ![效果预览](screenshot.png)
-
-转换后的iCal样例位于`example-output/`目录。
 
 ## 使用方式
 
@@ -24,4 +22,3 @@
 ## What's more
 
 * @ZhenShaw的[广大课表项目](https://github.com/ZhenShaw/GZHU-ClassTable)
-
