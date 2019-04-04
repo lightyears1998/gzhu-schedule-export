@@ -13,14 +13,20 @@ from datetime import datetime, timedelta
 
 """ 在下方输入信息 """
 
+# 第一次创建日程的日期
 FIRST_DATE = '2019/02/24'
 
-WEEK_COUNT = 20
+# 每隔七天创建日程的个数
+WEEK_COUNT = 0
 
 OUTPUT_FILENAME = 'week-mark.ics'
 
 """ 信息输入完成 """
 
+# 检查信息是否完整
+if WEEK_COUNT == 0:
+	print('请您先编辑此脚本，在提示区域内填入您的信息。')
+	exit()
 
 # 确认已经输入的信息
 print('将自' + FIRST_DATE + '始每隔1周创建Week X全天日程，共计创建' + str(WEEK_COUNT) + '次')

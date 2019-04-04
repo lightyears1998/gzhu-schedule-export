@@ -36,6 +36,11 @@ OUTPUT_FILENAME = 'schedule.ics'
 
 """ 信息输入完成 """
 
+# 检查信息是否完整
+if USERNAME == 'studentcode':
+	print('请您先编辑此脚本，在提示区域内填入您的信息。')
+	exit()
+
 
 # 确认已经输入的信息
 print('您的学号为' + USERNAME)
