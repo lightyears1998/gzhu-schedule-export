@@ -11,17 +11,17 @@ from datetime import datetime, timedelta
 """
 
 
-""" 在下方输入信息 """
+""" ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
 # 第一次创建日程的日期
-FIRST_DATE = '2019/02/24'
+FIRST_DATE = '2019/08/26'
 
 # 每隔七天创建日程的个数
 WEEK_COUNT = 0
 
 OUTPUT_FILENAME = 'week-mark.ics'
 
-""" 信息输入完成 """
+""" ⬆⬆⬆ 信息输入完成 ⬆⬆⬆ """
 
 # 检查信息是否完整
 if WEEK_COUNT == 0:
