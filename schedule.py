@@ -15,7 +15,7 @@ import json
 """
 
 
-""" 在下方输入信息 """
+""" ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
 
 # 学号和密码
@@ -25,16 +25,16 @@ PASSWORD = 'password'
 # 学年与学期
 # 学年取前4位数字，如2018-2019学年则取2018
 # 学期取1位数字，1=上学期，2=下学期
-YEAR = 2018
-SEMESTER = 2
+YEAR = 2019
+SEMESTER = 1
 
 # 学期第一周的星期一的日期
-DATE_OF_MONDAY_OF_FIRST_WEEK = '2019/2/25'
+DATE_OF_MONDAY_OF_FIRST_WEEK = '2019/8/26'
 
 OUTPUT_FILENAME = 'schedule.ics'
 
 
-""" 信息输入完成 """
+""" ⬆⬆⬆ 信息输入完成 ⬆⬆⬆ """
 
 # 检查信息是否完整
 if USERNAME == 'studentcode':
@@ -88,7 +88,7 @@ with opener.open(cas_url, urllib.parse.urlencode(data).encode(charset)) as respo
 
 
 # 登陆教务系统
-jwxt_login_url = 'http://jwxt.gzhu.edu.cn/jwglxt/lyiotlogin'
+jwxt_login_url = 'http://jwxt.gzhu.edu.cn/sso/lyiotlogin'
 opener.open(jwxt_login_url)
 
 
@@ -115,7 +115,7 @@ with opener.open(schedule_url, urllib.parse.urlencode(data).encode(charset)) as 
     payload = response.read().decode(charset)
     schedule = json.loads(payload)  # 载入Json形式的课表
     courses = schedule['kbList']  # 获取课程列表
-    print('查询到' + str(len(courses)) + '个课程')
+    print('查询到' + str(len(courses)) + '个课程：')
 
 # 输出ics
 opens_date = datetime.datetime.strptime(DATE_OF_MONDAY_OF_FIRST_WEEK, '%Y/%m/%d')
