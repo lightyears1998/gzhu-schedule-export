@@ -31,12 +31,13 @@ if OUTPUT_FILENAME_EDIT != "":
 
 """ ⬆⬆⬆ 信息输入完成 ⬆⬆⬆ """
 
+
 # 检查信息是否完整
-if len(USERNAME) != 10:
-	USERNAME = input('您输入的学号有误，请重新输入您的学号:  ')
-if (len(str(YEAR)) != 4):
+while len(USERNAME) != 10:
+	USERNAME = input('您输入的学号有误，请重新输入您的10位数字学号:  ')
+while (len(str(YEAR)) != 4):
     YEAR = int(input('您输入的学年有误，请重新输入4位数的学年:  '))
-if (SEMESTER != 1 & SEMESTER != 2):
+while (SEMESTER != 1 and SEMESTER != 2):
     SEMESTER = int(input('您输入的学期有误，请重新输入学期(1/2):  '))
 
 
@@ -48,10 +49,15 @@ print('输出文件名为' + OUTPUT_FILENAME)
 input('请按回车键确认上述信息：')
 
 
+# 打印一行空行
+print('')
+
+
 # 准备网络组件
 cookie_jar = http.cookiejar.CookieJar()
 cookie_handler = urllib.request.HTTPCookieProcessor(cookie_jar)
 opener = urllib.request.build_opener(cookie_handler)
+
 
 # 服务器在成功登陆后检查User-Agent
 # 发起无UA请求的IP会被短暂禁止连接
@@ -108,6 +114,7 @@ data = {
     'xqm': (3, 12)[SEMESTER == 2]
 }
 
+
 # 查询课表
 with opener.open(schedule_url, urllib.parse.urlencode(data).encode(charset)) as response:
     payload = response.read().decode(charset)
@@ -115,15 +122,15 @@ with opener.open(schedule_url, urllib.parse.urlencode(data).encode(charset)) as 
     courses = schedule['kbList']  # 获取课程列表
     print('查询到' + str(len(courses)) + '个课程：')
 
+
 # 输出ics
 opens_date = datetime.datetime.strptime(DATE_OF_MONDAY_OF_FIRST_WEEK, '%Y/%m/%d')
-
-
 if opens_date.weekday() != 0:
     raise ValueError(DATE_OF_MONDAY_OF_FIRST_WEEK + '似乎不是周一，是否设置了正确的DATE_OF_MONDAY_OF_FIRST_WEEK？')
 
 
 file = open(OUTPUT_FILENAME, 'w', encoding='utf-8')
+
 
 # 写入起始的历法和时区等信息
 file.write("""BEGIN:VCALENDAR
@@ -142,12 +149,14 @@ END:STANDARD
 END:VTIMEZONE
 """)
 
+
 # 每小节上课与下课时间
 period = [
     ('0830', '0915'), ('0920', '1005'), ('1025', '1110'), ('1115', '1200'),
     ('1350', '1435'), ('1440', '1525'), ('1545', '1630'), ('1635', '1720'),
     ('1820', '1905'), ('1910', '1955'), ('2000', '2045')
 ]
+
 
 # 写入课程信息
 for course in courses:
@@ -184,8 +193,10 @@ for course in courses:
         file.write('LOCATION:' + course['cdmc'] + '\n')  # 上课地点
         file.write('END:VEVENT\n')  # ics日程的结束标记
 
+
 # 写入结束信息并关闭文件
 file.write("END:VCALENDAR\n")
 file.close()
+
 
 print('\n完成')
