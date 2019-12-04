@@ -17,19 +17,12 @@ import json
 
 """ ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
-
-# 学号和密码
-USERNAME = 'studentcode'
-PASSWORD = 'password'
-
-# 学年与学期
-# 学年取前4位数字，如2018-2019学年则取2018
-# 学期取1位数字，1=上学期，2=下学期
-YEAR = 2019
-SEMESTER = 1
-
-# 学期第一周的星期一的日期
-DATE_OF_MONDAY_OF_FIRST_WEEK = '2019/8/26'
+USERNAME = int(input('请输入您的学号:  '))
+PASSWORD = int(input('请输入您的密码:  '))
+YEAR = int(input('请输入学年，学年取前4位数字，如2019-2020学年, 则取2019:  '))
+SEMESTER = int(input('请输入学期(1/2), 1=上学期, 2=下学期:  '))
+DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的星期一的日期,格式yyyy/mm/dd,如: 2019/8/26:  ')
+# OUTPUT_FILENAME = input('请输入输出文件名:  ') + '.ics'
 
 OUTPUT_FILENAME = 'schedule.ics'
 
@@ -37,13 +30,16 @@ OUTPUT_FILENAME = 'schedule.ics'
 """ ⬆⬆⬆ 信息输入完成 ⬆⬆⬆ """
 
 # 检查信息是否完整
-if USERNAME == 'studentcode':
-	print('请您先编辑此脚本，在提示区域内填入您的信息。')
-	exit()
+if len(str(USERNAME)) != 10:
+	USERNAME = int(input('您输入的学号有误，请重新输入您的学号:  '))
+if (len(str(YEAR)) != 4):
+    YEAR = int(input('您输入的学年有误，请重新输入4位数的学年:  '))
+if (SEMESTER != 1 & SEMESTER != 2):
+    SEMESTER = int(input('您输入的学期有误，请重新输入学期(1/2):  '))
 
 
 # 确认已经输入的信息
-print('您的学号为' + USERNAME)
+print('您的学号为' + str(USERNAME))
 print('抓取' + str(YEAR) + '-' + str(YEAR+1) + '学年' + ['上学期', '下学期'][SEMESTER == 2] + '的课程表')
 print('第一周的周一设定为' + DATE_OF_MONDAY_OF_FIRST_WEEK)
 print('输出文件名为' + OUTPUT_FILENAME)
