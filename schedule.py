@@ -23,7 +23,7 @@ YEAR = int(input('请输入学年，学年取前4位数字，如2019-2020学年,
 SEMESTER = int(input('请输入学期(1/2), 1=上学期, 2=下学期:  '))
 DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的星期一的日期,格式yyyy/mm/dd,如: 2019/8/26:  ')
 OUTPUT_FILENAME = 'schedule.ics'  # 输出文件名的默认值
-OUTPUT_FILENAME_EDIT = input('请填写输出文件名（默认{}）:  '.format(OUTPUT_FILENAME))
+OUTPUT_FILENAME_EDIT = input(f'请填写输出文件名（默认{OUTPUT_FILENAME}）:  ')
 
 # 当用户填写的输出文件名非空时，使用用户填写的输出文件名
 if OUTPUT_FILENAME_EDIT != "":
