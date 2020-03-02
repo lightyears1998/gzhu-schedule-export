@@ -2,6 +2,7 @@
 
 import urllib.request, urllib.parse
 import http.cookiejar
+from getpass import getpass
 import re
 import datetime
 import json
@@ -9,21 +10,21 @@ import json
 
 """schedule.py
 
-从广州大学教务系统中获取课程信息，并输出为ics文件
-以便将课程信息导入到支持ics的日历程序中
+从广州大学教务系统中获取课程信息，并输出为ics文件，
+以便将课程信息导入到支持ics的日历程序中。
 
 """
 
 
 """ ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
-USERNAME = input('请输入您的学号:  ')
-PASSWORD = input('请输入您的密码:  ')
-YEAR = int(input('请输入学年，学年取前4位数字，如2019-2020学年, 则取2019:  '))
-SEMESTER = int(input('请输入学期(1/2), 1=上学期, 2=下学期:  '))
-DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的星期一的日期,格式yyyy/mm/dd,如: 2019/8/26:  ')
+USERNAME = input('请输入您的学号：')
+PASSWORD = getpass(prompt='请输入您的密码：')
+YEAR = int(input('请输入学年（学年取前4位数字，如2019-2020学年, 则取2019）：'))
+SEMESTER = int(input('请输入学期(1/2), 1=上学期, 2=下学期：'))
+DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的周一的日期（格式：2020/2/17）：')
 OUTPUT_FILENAME = 'schedule.ics'  # 输出文件名的默认值
-OUTPUT_FILENAME_EDIT = input(f'请填写输出文件名（默认{OUTPUT_FILENAME}）:  ')
+OUTPUT_FILENAME_EDIT = input(f'请填写输出文件名（默认{OUTPUT_FILENAME}）：')
 
 # 当用户填写的输出文件名非空时，使用用户填写的输出文件名
 if OUTPUT_FILENAME_EDIT != "":
@@ -82,12 +83,23 @@ with opener.open(cas_url) as response:
             data[match.group('name')] = match.group('value')
     data['username'], data['password'] = USERNAME, PASSWORD
 
+    # 下载验证码并提示用户输入
+    captcha_url = 'https://cas.gzhu.edu.cn/cas_server/captcha.jsp'
+    with opener.open(captcha_url) as captcha:
+        with open('captcha.jpg', mode='wb') as captcha_file:
+            captcha_file.write(captcha.read())
+    data['captcha'] = input("请查看当前目录下的captcha.jpg，并输入验证码：")
+
 
 # 登陆统一认证系统
 with opener.open(cas_url, urllib.parse.urlencode(data).encode(charset)) as response:
     payload = response.read().decode(charset)
+
+    if '验证码不正确' in payload:
+        print('验证码输入错误。')
+        exit(0)
     if '账号或密码错误' in payload:
-        print('用户名或密码错误')
+        print('用户名或密码错误。')
         exit(0)
 
 
@@ -169,10 +181,15 @@ for course in courses:
     # 始末上课周数，此数据的样式有“1-16周”，“11周”，还有些课程分段上课，如“9周,14周”
     begin_and_end_weeks = course['zcd'].split(',')  # 将分段上课的课程分段处理
 
-    print(name, end=' ')  # 向控制台输出课程名称
+    print(f'处理：《{name}》')  # 向控制台输出课程名称
 
     for begin_and_end_week in begin_and_end_weeks:
         begin_and_end_week = begin_and_end_week.strip('周')  # 去掉结尾的“周”
+        # 极少数课程指定单双周上课，如“5-15周(单)”。程序无法正确处理这种格式。
+        if begin_and_end_week.endswith('(单)') or begin_and_end_week.endswith('(双)'):
+            print(f'\n程序可能没有正确处理课程《{name}》的上课时间“{begin_and_end_week}”，请注意核对。')
+            begin_and_end_week = begin_and_end_week.rstrip('周(单)')
+            begin_and_end_week = begin_and_end_week.rstrip('周(双)')
         try:
             begin_week, end_week = begin_and_end_week.split('-')  # 处理“1-16周”形式的课程
         except ValueError:
