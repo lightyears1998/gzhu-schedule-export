@@ -1,5 +1,6 @@
 #!python3
 
+import re
 from datetime import datetime, timedelta
 
 
@@ -14,19 +15,21 @@ from datetime import datetime, timedelta
 """ ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
 # 第一次创建日程的日期
-FIRST_DATE = '2019/08/26'
+FIRST_DATE = input("创建标记的起始日期（格式：2020/2/16）：").strip() or '2019/08/26'
 
 # 每隔七天创建日程的个数
-WEEK_COUNT = 0
+WEEK_COUNT = int(input('需要创建多少个星期标记？（默认：20）：') or '20')
 
 OUTPUT_FILENAME = 'week-mark.ics'
 
 """ ⬆⬆⬆ 信息输入完成 ⬆⬆⬆ """
 
 # 检查信息是否完整
-if WEEK_COUNT == 0:
-	print('请您先编辑此脚本，在提示区域内填入您的信息。')
+if not re.match('\d{4}/\d{1,2}/\d{1,2}', FIRST_DATE):
+	print('您输入的日期格式似乎有误？请您检查后重新输入。')
 	exit()
+if WEEK_COUNT <= 0:
+    print("创建星期标记的数量似乎有误？请您检查后重新输入。")
 
 # 确认已经输入的信息
 print('将自' + FIRST_DATE + '始每隔1周创建Week X全天日程，共计创建' + str(WEEK_COUNT) + '次')
