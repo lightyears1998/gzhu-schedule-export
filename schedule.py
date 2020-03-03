@@ -22,7 +22,7 @@ USERNAME = input('请输入您的学号：')
 PASSWORD = getpass(prompt='请输入您的密码：')
 YEAR = int(input('请输入学年（学年取前4位数字，如2019-2020学年, 则取2019）：'))
 SEMESTER = int(input('请输入学期(1/2), 1=上学期, 2=下学期：'))
-DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的周一的日期（格式：2020/2/17）：')
+DATE_OF_MONDAY_OF_FIRST_WEEK = input('请输入学期第一周的周一的日期（格式：2020/3/2）：')
 OUTPUT_FILENAME = 'schedule.ics'  # 输出文件名的默认值
 OUTPUT_FILENAME_EDIT = input(f'请填写输出文件名（默认{OUTPUT_FILENAME}）：')
 

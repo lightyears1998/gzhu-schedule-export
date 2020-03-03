@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 """ ⬇⬇⬇ 在下方输入信息 ⬇⬇⬇ """
 
 # 第一次创建日程的日期
-FIRST_DATE = input("创建标记的起始日期（格式：2020/2/16）：").strip() or '2019/08/26'
+FIRST_DATE = input("创建标记的起始日期（格式：2020/3/1）：").strip() or '2020/3/1'
 
 # 每隔七天创建日程的个数
 WEEK_COUNT = int(input('需要创建多少个星期标记？（默认：20）：') or '20')
